@@ -1,14 +1,19 @@
-from binaryTree import BinaryTree 
+from binary_searchTree import BinarySearchTree 
 
-biTree = BinaryTree(1) 
+biTree = BinarySearchTree()   
 
-biTree.insert_left(biTree.root, 2)   
-biTree.insert_right(biTree.root, 3)  
+lst = [20,10,5,2,30,45,44,50,60]
 
-biTree.insert_left(biTree.root.right, 4) 
+for i in range(len(lst)):
+    biTree.insert(biTree.root, lst[i])  
 
-biTree.pre_order(biTree.root) 
+biTree.level_order(biTree.root) 
+biTree.delete(20)
 print()
-biTree.in_order(biTree.root)
+biTree.level_order(biTree.root)
+
+
+
+
 
 
