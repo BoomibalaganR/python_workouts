@@ -13,33 +13,40 @@ class BinarySearchTree:
             self.right = None   
                 
     
+    # helper method 
+    def insert(self, data):  
+        
+        if self.root is None:
+            self.root = self.__Node(data)    
+            return  
+        self.root = self.__insert(self.root, data) 
+       
+       
     # insert the data to tree 
-    def insert(self, root, data): 
-
-        if self.root is None: 
-            self.root = self.__Node(data) 
-            return   
-            
-        if root is None:  
+    def __insert(self, root, data): 
+      
+        if root is None:  # insert the node
             return self.__Node(data) 
         
         if data < root.data: 
-           root.left = self.insert(root.left, data) # take left 
+           root.left = self.__insert(root.left, data) # take left 
         elif root.data < data: 
-           root.right =  self.insert(root.right, data) # take right 
+           root.right =  self.__insert(root.right, data) # take right 
            
         return root
     
+    
+    # helper method
     def delete(self, data):
+    
+        if self.root is None:  
+            print("\nno element found")
+            return  
         self.root = self.__delete(self.root, data)
-
+    
     # delete the node in tree 
     def __delete(self, root, data):  
         
-        if root is None:  
-            print("\nno element found")
-            return  
-
         if(data < root.data):
             root.left = self.__delete(root.left, data)
         elif(root.data < data): 
@@ -66,6 +73,11 @@ class BinarySearchTree:
             min_val = root.data
             root = root.left
         return min_val  
+    
+    
+    # search element in binary tree 
+    def search():
+        pass
     
     
     # level order traversal  
