@@ -1,4 +1,4 @@
-from queue import Queue
+from linearQueue import Queue
 
    
 queue = Queue(2) 

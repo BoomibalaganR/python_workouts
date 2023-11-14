@@ -1,16 +1,13 @@
 from maxHeap import MaxHeap 
 
-hp = MaxHeap() 
 
-lst = [1,2,3,4,5,6,7,9]   
-
-# create heap
-for i in lst:
-     hp.insert_element(i)  
-print(hp.heap) 
-  
-
-  
+lst = [1,2,3,4,5]   
+print(lst)
+MaxHeap.heapify(lst)
+print("heap : ",lst) 
+MaxHeap.heap_push(lst, 6)
+print(lst)
+exit()
 
 # delete element 
 for i in range(9): 

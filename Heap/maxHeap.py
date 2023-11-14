@@ -1,99 +1,86 @@
 import math
 
-class MaxHeap:
-    
-    def __init__(self):
-        self.heap= []  
-        self.size = 0
-        
-    
-    # get maximum element
-    def get_max(self):
-        if len(self.heap) != 0:
-            return self.heap[0]
+class MaxHeap: 
     
     
-    # delete the element from max heap
-    def delete_element(self):  
-       
-        if self.size == 0:
-            return
-        v = self.heap[0] 
-        
-        self.heap[0] = self.heap[self.size-1]
-        del self.heap[self.size-1] 
-        self.size-=1 
-        
-        self.__adjust_top_down(0) 
-        return v
-        
-   
-   
-    # adjust max heap condition from top-down when delete the element
-    def __adjust_top_down(self, parent):  
-       
-        while parent < self.size:  
-            
-            print(self.heap)
-            parent =  self.to_satisfy_heap(parent) 
-            if parent is None: 
-                 return
-                
+    @staticmethod
+    def push(heap, val):
+        heap.append(val)   
+        if(1 < len(heap)):
+             MaxHeap.__adjust_buttom_up(heap)
+        return True
     
-    # insert the element into max heap
-    def insert_element(self, element): 
-
-        self.heap.append(element) 
-        self.size+=1 
+    @staticmethod
+    def pop(heap): 
         
-        if self.size == 0:
-            return  
+        size = len(heap)
+        if size == 0:
+            return None
+        val = heap[0] 
         
-        self.__adjust_buttom_up()       
-            
+        heap[0] = heap[size-1]
+        del heap[size-1]  
+        MaxHeap.__heapify(heap, 0) 
+        return val 
     
-    # adjust max heap condition from buttom-Up when insert the element
-    def __adjust_buttom_up(self): 
-      
-        child = self.size-1
+    
+    # adjust max heap condition from buttom-Up when insert the element  
+    @staticmethod
+    def __adjust_buttom_up(heap): 
+        print("size: ",len(heap))
+        child = len(heap)-1
         parent = math.ceil(child/2)-1  
         
         while parent >= 0:     
             
-            if self.heap[parent] < self.heap[child]:  
-                self.heap[parent],self.heap[child] = self.heap[child],self.heap[parent]  
+            if heap[parent] < heap[child]:  
+                heap[parent], heap[child] = heap[child], heap[parent]  
                 child = parent
                 parent = math.ceil(child/2)-1  
             else:
-                return   
+                return    
+            
     
+    @staticmethod
+    def heapify(heap):
+        for parent in range(len(heap)-1, -1, -1):
+            MaxHeap.__heapify(heap, parent)
+       
+    
+    @staticmethod
+    def __heapify(heap, parent): 
+  
+        while parent is not None: 
+            parent = MaxHeap.to_satisfy_heap(heap, parent) 
+              
         
-    # heap condition 
-    def to_satisfy_heap(self, parent):  
+    # heap condition  
+    @staticmethod
+    def to_satisfy_heap(heap, parent):  
         
             left = 2*parent+1 
             right = 2*parent+2  
-        
-            if right < self.size:   
+            size = len(heap)
+            
+            if right < size:   
                 
-                if self.heap[left] < self.heap[right] and self.heap[parent] < self.heap[right]:
-                    self.heap[parent], self.heap[right] = self.heap[right], self.heap[parent]
+                if heap[left] < heap[right] and heap[parent] < heap[right]:
+                    heap[parent], heap[right] = heap[right], heap[parent]
                     return right  
-                elif  self.heap[right] < self.heap[left] and self.heap[parent] < self.heap[left]: 
-                    self.heap[parent], self.heap[left] = self.heap[left], self.heap[parent]
+                elif  heap[right] < heap[left] and heap[parent] < heap[left]: 
+                    heap[parent], heap[left] = heap[left], heap[parent]
                     return left
                
                 
-            elif left < self.size: 
-                 if  self.heap[parent] < self.heap[left]:
-                    self.heap[parent], self.heap[left] = self.heap[left], self.heap[parent]
+            elif left < size: 
+                 if  heap[parent] < heap[left]:
+                    heap[parent], heap[left] = heap[left], heap[parent]
                     return left 
             
             return None
         
 
 
+ 
    
-
-
 
