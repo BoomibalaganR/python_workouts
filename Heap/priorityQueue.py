@@ -7,7 +7,7 @@ class PriorityQueue:
     
     def pop(self): 
         
-        val = MaxHeap.pop(self.pqueue) 
+        val = MaxHeap.pop(self.pqueue, len(self.pqueue)) 
         if val is not None: 
             return val
         print("priority queue is empty")
@@ -26,12 +26,4 @@ class PriorityQueue:
 # main 
 pq = PriorityQueue()
 
-pq.pop() 
-print(pq.pqueue)
-pq.push(7)  
-pq.push(16)  
-pq.push(1)  
-pq.push(9) 
-print(pq.pqueue) 
-print(pq.pop()) 
-print(pq.pqueue) 
+

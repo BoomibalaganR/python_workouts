@@ -3,7 +3,7 @@ from maxHeap import MaxHeap
 #lst = [1,2,3,4,5]   
 lst = [50,2,13,5,17,89] 
 
-MaxHeap.top_largest(lst,4)
+MaxHeap.top_k_largest(lst,2)
 
 exit()
 

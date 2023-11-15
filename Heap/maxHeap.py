@@ -92,7 +92,10 @@ class MaxHeap:
         
 
     @staticmethod
-    def top_largest(ls, k): 
+    def top_k_largest(ls, k):  
+        
+        if len(ls) <= k:
+            k = len(ls)-1
         res =[]
         MaxHeap.heapify(ls)  
 
