@@ -8,19 +8,19 @@ class MaxHeap:
         heap.append(val)   
         if(1 < len(heap)):
              MaxHeap.__adjust_buttom_up(heap)
-        return True
+        return True 
+    
     
     @staticmethod
-    def pop(heap): 
-        
-        size = len(heap)
+    def pop(heap, size):  
+      
         if size == 0:
             return None
         val = heap[0] 
         
-        heap[0] = heap[size-1]
-        del heap[size-1]  
-        MaxHeap.__heapify(heap, 0) 
+        heap[0] = heap[size-1] 
+        del heap[size-1]
+        MaxHeap.__heapify(heap, 0, size-1)  
         return val 
     
     
@@ -43,24 +43,35 @@ class MaxHeap:
     
     @staticmethod
     def heapify(heap):
-        for parent in range(len(heap)-1, -1, -1):
-            MaxHeap.__heapify(heap, parent)
+        size = len(heap)
+        for parent in range(size-1, -1, -1):
+            MaxHeap.__heapify(heap, parent, size)
        
     
     @staticmethod
-    def __heapify(heap, parent): 
-  
+    def __heapify(heap, parent, size): 
+        
         while parent is not None: 
-            parent = MaxHeap.to_satisfy_heap(heap, parent) 
-              
+            parent = MaxHeap.to_satisfy_heap(heap, parent, size) 
+    
+    
+    @staticmethod
+    def sort(heap):  
+ 
+        size = len(heap) 
+        res = [0 for i in range(size)]
+        for i in range(size): 
+           res[size-i-1] = MaxHeap.pop(heap, len(heap))
+        print(res)
+        
         
     # heap condition  
     @staticmethod
-    def to_satisfy_heap(heap, parent):  
+    def to_satisfy_heap(heap, parent, size):  
         
             left = 2*parent+1 
             right = 2*parent+2  
-            size = len(heap)
+           
             
             if right < size:   
                 
@@ -80,6 +91,15 @@ class MaxHeap:
             return None
         
 
+    @staticmethod
+    def top_largest(ls, k): 
+        res =[]
+        MaxHeap.heapify(ls)  
+
+        for i in range(k): 
+            res.append(MaxHeap.pop(ls, len(ls)))
+        print(res)
+        
 
  
    

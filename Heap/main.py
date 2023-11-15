@@ -1,12 +1,10 @@
 from maxHeap import MaxHeap 
 
+#lst = [1,2,3,4,5]   
+lst = [50,2,13,5,17,89] 
 
-lst = [1,2,3,4,5]   
-print(lst)
-MaxHeap.heapify(lst)
-print("heap : ",lst) 
-MaxHeap.heap_push(lst, 6)
-print(lst)
+MaxHeap.top_largest(lst,4)
+
 exit()
 
 # delete element 
