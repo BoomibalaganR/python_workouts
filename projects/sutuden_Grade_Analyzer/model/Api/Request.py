@@ -32,14 +32,16 @@ def is_studentExit(name):
 # get grade list given name
 def get_grade(name):
     student =  StudentDB.read_one({"$and": [{"name": name.title()}, {"grade_list": {"$ne": []}}]}, {"_id": 0, "grade_list": 1}) 
-    return student 
+    if student is None:
+        return "404" 
+    return student
 
 
 # get student average
 def get_student_average(name): 
     student =  get_grade(name)  
     if student is None :
-        return {"average": 0}
+        return "404"
     
     grade_lists = student["grade_list"]
     
@@ -50,15 +52,15 @@ def get_student_average(name):
 
 
 # get class average
-def get_class_average():
-    class_gradeList = StudentDB.read({"grade_list": {"$ne": []}},{"_id": 0,"grade_list": 1}) 
+def get_class_average():  
+
+    grades_collection = StudentDB.get_connection() 
+    pipeline = [
+        {"$unwind": {"path": "$grade_list"}},
+        {"$group": {"_id": "null", "class_average": {"$avg": {"$sum": "$grade_list"}}}}, 
+    ]  
+    for document in grades_collection.aggregate(pipeline): 
+        return {"class_average": document["class_average"]} 
     
-    if len(class_gradeList) == 0:
-        return {"class_average": 0} 
+    return {"message": "no grade available for calculate average"}
     
-    class_total = 0
-    for student in class_gradeList:
-        for mark in student["grade_list"]: 
-            class_total+=mark 
-            
-    return {"class_average": round(class_total/len(class_gradeList)-1, 2)} 

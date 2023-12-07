@@ -4,8 +4,8 @@ import pymongo
 class StudentDB: 
     
     __myclient = pymongo.MongoClient("mongodb://localhost:27017/") 
-    __database = "studentDB"
-    __collection = "students" 
+    __database = "student_grades"
+    __collection = "grades" 
     
     @classmethod
     def get_connection(cls): 

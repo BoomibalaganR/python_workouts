@@ -1,14 +1,13 @@
-from entity.product import Product 
-from entity.discount_product import DiscountedProduct
 
-def display(product):
+def display(response):
     print("\n--------------------------------------------------------")
-    print(" ID\t\tName\t\tPrice\t\tQuantity")  
+    print(" Name\t\tPrice\t\tQuantity")  
     print("--------------------------------------------------------")
     
-    if product == "400":
+    if response["status_code"] == 404:
         print("\t\tno Record found..")
     else:  
-        print(product)
+      for product in response["data"]:
+          print(product)
     print("--------------------------------------------------------")
     

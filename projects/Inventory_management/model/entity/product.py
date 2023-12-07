@@ -1,15 +1,10 @@
 class Product: 
   
-    def __init__(self, id, name, price, quantity): 
+    def __init__(self, name, price, quantity): 
     
-        self.__id = int(id)
         self.__name = name 
         self._price = float(price) 
         self.__quantity = int(quantity) 
-    
-    
-    def get_id(self):
-        return self.__id  
     
     def get_name(self):
         return self.__name 
@@ -31,5 +26,5 @@ class Product:
         self.__quantity = quantity 
         
     def to_dict(self):
-        return dict(_id= self.__id, name = self.__name, price=self._price,
+        return dict(name = self.__name, price=self._price,
                     quantity= self.__quantity)

@@ -1,4 +1,4 @@
-from entity.product import Product
+from model.entity.product import Product
 
 class DiscountedProduct(Product):
     
