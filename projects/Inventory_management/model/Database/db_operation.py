@@ -36,7 +36,7 @@ class Database:
         
 
     @staticmethod
-    def aggregate_product(collection_name, pipeline):
+    def aggregate(collection_name, pipeline):
         order_coll = DB.get_connection(collection_name) 
         
         return list(order_coll.aggregate(pipeline))

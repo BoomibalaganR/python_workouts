@@ -82,7 +82,7 @@ def add_customer(customer_name):
     
     customerID_list = Database.read(collection_name, query, project={})   
     if len(customerID_list) == 0: 
-        return Database.create(collection_name, {"customerName": customer_name})
+        return Database.create(collection_name, {"customer_name": customer_name})
  
     return customerID_list[0]["_id"]
 
@@ -123,7 +123,7 @@ def create_order(customer_name, product_name, ordered_quantity):
  
    
     # create orders 
-    if Database.create("orders", order_detail):   
+    if Database.create(collection_name="orders", data= order_detail):   
         
         # decrease the available quantity
         update_product(product_name, -1*ordered_quantity)
@@ -165,7 +165,7 @@ def get_sales_report():
     ] 
      
 
-    list_of_report = Database.aggregate_product("orders", pipeline) 
+    list_of_report = Database.aggregate("orders", pipeline) 
     
     if len(list_of_report) == 0:
         return {"status_code": 204, "message": "no sales Report available..."}
@@ -173,6 +173,91 @@ def get_sales_report():
     return {"data": list_of_report, "status_code": 200 }
      
      
+         
+# get past purchase product ids by customer_id
+def get_Allproduct_id_by_cutomerId(customer_id):
+    pipeline =  [ 
+                    {"$match": {"customer_id": customer_id}},
+                    {"$group": {"_id": "$product_id"}},                  
+                ] 
+    
+    list_of_dict_id = Database.aggregate(collection_name= "orders", pipeline= pipeline) 
+    
+    productId_list = [ document["_id"] for document in list_of_dict_id ]    
+    return productId_list
+
+
+
+# get similiar customer ids who are all purchase same product
+def get_similiar_customer(recommended_customer_id, productId_list):
+
+    pipeline =  [
+                    {"$match":  
+                        {"$and": [ {"customer_id":{"$ne" : recommended_customer_id }},
+                        {"product_id":  {"$in": productId_list}}]}},  
+                
+                        {"$group": {"_id": "$customer_id"}}
+               
+                ]
+    similiar_customer_ids = Database.aggregate(collection_name="orders", pipeline= pipeline)       
+    
+    return  [ document["_id"] for document in similiar_customer_ids]
+    
+    
+        
+def _get_recommend_product(similiar_customerId_list, num_recommendations):
+          
+        pipeline = [ 
+                        {"$match": {"customer_id": {"$in": similiar_customerId_list}}},
+
+                        {"$group": {"_id": {"customer_id": "$customer_id", "product_id": "$product_id"}, 
+						            "total_quantity": {"$sum": "$quantity"}, 
+                                    "purchase_count": {"$sum": 1}}}, 
+	                    
+                        {"$group": {"_id": "$_id.customer_id", 
+						            "orders": {"$push": {"product_id": "$_id.product_id", 
+                                    "purchase_count": "$purchase_count"}}}}, 
+
+
+                        {"$unwind": {"path": "$orders"}},
+                        {"$group": {"_id": "$orders.product_id", 
+					            "purchase_count": {"$max": "$orders.purchase_count"}}},
+  
+	                    {"$sort": {"purchase_count": -1}},
+
+                        {"$lookup": {"from": "products", "localField": "_id", "foreignField": "_id", "as": "product_detail"}},
+                        
+                        {"$limit": num_recommendations},
+                        {"$project": {"_id": 0, "product_name": "$product_detail.name"}},
+                ] 
+               
+               
+        return Database.aggregate(collection_name= "orders", pipeline= pipeline)
+
+
+
+def get_recommend_product(customer_name, num_recommendation):
+    customer_list = Database.read(collection_name= "users", 
+                                query= {"customer_name": customer_name.title()}, project= {}) 
+    
+    if len(customer_list) == 0:
+        return {"status_code": 404, "message": "\ncustomer_name not found"} 
+  
+    customer_id = customer_list[0]["_id"]
+   
+    # get list of product who want to recommend 
+    list_of_ids = get_Allproduct_id_by_cutomerId(customer_id)
+
+    # get similiar customer_id 
+    similiar_customer_list = get_similiar_customer(customer_id, list_of_ids)
+   
+    # get recommend product list
+    recommended_product = _get_recommend_product(similiar_customer_list, num_recommendation)
+   
+   
+    return {"data": recommended_product, "status_code": 200 }
+    
+    
     
 def is_nameExit(name):
     response =  get_product_by_name(name, {"_id": 1})
@@ -182,10 +267,3 @@ def is_nameExit(name):
     return {"status_code": 200 ,"message": "name already exits..."}
 
     
-def is_idExits(id):                                             # check product id is exit or not
-        
-    product_list = Database.read("products", {"_id":id}) 
-    if len(product_list) == 0:
-        return "404" 
-    return "200" 
-        

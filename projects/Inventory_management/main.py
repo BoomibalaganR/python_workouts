@@ -1,4 +1,4 @@
-from controller.service import * 
+from services.service import *
 
 
 while(True): 
@@ -32,7 +32,10 @@ while(True):
     elif choice == 7:                                       # sale report
        genarate_sales_report()
     
-    elif choice == 8:                                       # exit program
+    elif choice == 8:                                       # recommend_product
+       recommend_product()
+    
+    elif choice == 9:                                       # exit program
         print("\n\t\t<<<Thank You>>>")
         break 
     

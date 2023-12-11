@@ -1,7 +1,7 @@
 from model.entity.product import Product 
 from view import home_ui, product_ui, product_input, product_search, sales_report_ui
 
-from model.Api import Request    
+from api import Request    
 
 
 def add():
@@ -103,4 +103,29 @@ def genarate_sales_report():
     
     input("please enter to continue...")
 
+
+def recommend_product():
+    while(True):                                    # get customer name
+        customer_name = input("Enter customer Name: ")  
+        if customer_name.isalpha():  
+            break 
+        print("invalid literal...\n")  
+        
+    while(True):                                    # get number of product
+        num_recommend = input("Enter num recommendation : ")  
+        if num_recommend.isnumeric():  
+            break 
+        print("invalid literal...\n") 
+    
+    #print(customer_name, num_recommend)
+    response = Request.get_recommend_product(customer_name, int(num_recommend) ) 
+    
+    if response["status_code"] == 200:
+       for document in response["data"]:
+           print(document["product_name"])
+       
+    else:
+        print(response["message"])
+    
+    input("please enter to continue...")
 
