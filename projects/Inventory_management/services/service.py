@@ -1,5 +1,5 @@
-from model.entity.product import Product 
-from view import home_ui, product_ui, product_input, product_search, sales_report_ui
+#from model.entity.product import Product 
+from view import  product_ui, product_input, product_search, sales_report_ui
 
 from api import Request    
 
@@ -117,8 +117,8 @@ def recommend_product():
             break 
         print("invalid literal...\n") 
     
-    #print(customer_name, num_recommend)
-    response = Request.get_recommend_product(customer_name, int(num_recommend) ) 
+    
+    response = Request.get_recommend_product(customer_name, int(num_recommend)) 
     
     if response["status_code"] == 200:
        for document in response["data"]:

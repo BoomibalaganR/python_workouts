@@ -1,5 +1,5 @@
 from services.service import *
-
+from view import home_ui
 
 while(True): 
     home_ui.display()    # display menu

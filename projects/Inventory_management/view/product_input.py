@@ -1,7 +1,7 @@
 from model.entity.product import Product 
-from model.entity.discount_product import DiscountedProduct  
 
-from model.Api import Request
+from api import Request
+
 
 def form():
   
@@ -51,14 +51,4 @@ def form():
     
     return Product( name, price, quantity)
     
-    """  
-    while(True):                                       # get discount if exit
-        discount = input("Enter discount percent ( if exit otherwise press 0 )")
-        if discount.isnumeric():
-            break
-        print("invalid literal... \n")   
-    
-    
-    if discount == '0':
-        return  DiscountedProduct(id, name, price, quantity, discount)
-  """
+  

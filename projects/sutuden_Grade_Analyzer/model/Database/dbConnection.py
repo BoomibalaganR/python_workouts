@@ -42,4 +42,7 @@ class StudentDB:
         student_collection = StudentDB.get_connection()
         return student_collection.find_one(query, option) 
         
-        
+    
+    def aggregate(pipeline):
+        student_collection = StudentDB.get_connection()
+        return student_collection.aggregate(pipeline)

@@ -1,7 +1,7 @@
-from entity.student import Student  
+from model.entity.student import Student  
 from view import home_ui
 
-from model.Api import Request
+from api import Request
 
 # this helper function do get name from student
 def  get_name_from_student() -> str:
@@ -13,6 +13,7 @@ def  get_name_from_student() -> str:
                 print("invalid literals..")  
                 continue 
             return name
+         
             
 # this helper function do get grade from student 
 def get_grade_from_student() -> list:
@@ -30,7 +31,6 @@ def get_grade_from_student() -> list:
             grade_list.append(int(grade)) 
         else: 
             print("enter valid grade...")
-
 
 
 

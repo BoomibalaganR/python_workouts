@@ -97,7 +97,7 @@ class MaxHeap:
         if len(ls) <= k:
             k = len(ls)-1
         res =[]
-        MaxHeap.heapify(ls)  
+        MaxHeap.heapify(ls)  # O(n)
 
         for i in range(k): 
             res.append(MaxHeap.pop(ls, len(ls)))

@@ -1,5 +1,5 @@
 from model.Database.dbConnection import StudentDB
-from entity.student import Student
+from model.entity.student import Student
 
 
 # create student 
@@ -39,27 +39,24 @@ def get_grade(name):
 
 # get student average
 def get_student_average(name): 
-    student =  get_grade(name)  
-    if student is None :
-        return "404"
     
-    grade_lists = student["grade_list"]
-    
-    tmark = 0
-    for grade in grade_lists: 
-       tmark+=grade 
-    return {"average": tmark/len(grade_lists)}
+    pipeline = [    {"$match": {"name": name.title()}}, {"$unwind": {"path": "$grade_list"}}, 
+                    {"$group": {"_id": "$name", "average": {"$avg": "$grade_list"}}}, 
+                    {"$project": {"_id":0, "average": 1}}
+                ]
+    for document in StudentDB.aggregate(pipeline):
+        return document
+    return {"message": "no more grade to calculate average..."}
 
 
 # get class average
 def get_class_average():  
 
-    grades_collection = StudentDB.get_connection() 
     pipeline = [
         {"$unwind": {"path": "$grade_list"}},
         {"$group": {"_id": "null", "class_average": {"$avg": {"$sum": "$grade_list"}}}}, 
     ]  
-    for document in grades_collection.aggregate(pipeline): 
+    for document in StudentDB.aggregate(pipeline): 
         return {"class_average": document["class_average"]} 
     
     return {"message": "no grade available for calculate average"}

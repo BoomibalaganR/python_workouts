@@ -1,5 +1,5 @@
 from model.Database.db_operation import Database
-from model.entity.product import Product 
+#from model.entity.product import Product 
 
 from datetime import datetime
 
@@ -77,7 +77,7 @@ def delete_product(product_name):
 
 def add_customer(customer_name):
     
-    query = {"customerName": customer_name.title()} 
+    query = {"customer_name": customer_name.title()} 
     collection_name = "users" 
     
     customerID_list = Database.read(collection_name, query, project={})   
@@ -165,7 +165,7 @@ def get_sales_report():
     ] 
      
 
-    list_of_report = Database.aggregate("orders", pipeline) 
+    list_of_report = Database.aggregate(collection_name= "orders", pipeline= pipeline) 
     
     if len(list_of_report) == 0:
         return {"status_code": 204, "message": "no sales Report available..."}
@@ -236,7 +236,9 @@ def _get_recommend_product(similiar_customerId_list, num_recommendations):
 
 
 
-def get_recommend_product(customer_name, num_recommendation):
+def get_recommend_product(customer_name, num_recommendation): 
+    
+    # check if customer exit or not 
     customer_list = Database.read(collection_name= "users", 
                                 query= {"customer_name": customer_name.title()}, project= {}) 
     
@@ -245,7 +247,8 @@ def get_recommend_product(customer_name, num_recommendation):
   
     customer_id = customer_list[0]["_id"]
    
-    # get list of product who want to recommend 
+   
+    # get list of past purchased products who want to recommend 
     list_of_ids = get_Allproduct_id_by_cutomerId(customer_id)
 
     # get similiar customer_id 
